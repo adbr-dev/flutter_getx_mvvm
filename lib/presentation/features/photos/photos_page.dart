@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 import '../../utils/util_size.dart';
+import 'photos_controller.dart';
 
-class PhotosPage extends StatelessWidget {
+class PhotosPage extends GetView<PhotosController> {
   const PhotosPage({super.key});
 
   @override
@@ -13,6 +15,7 @@ class PhotosPage extends StatelessWidget {
           autofocus: true,
           decoration: _inputDecoration,
           cursorHeight: 22.0,
+          onChanged: controller.onSearchQuery,
         ),
       ),
     );

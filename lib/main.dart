@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'presentation/features/photos/photos_controller.dart';
 import 'presentation/features/photos/photos_page.dart';
 import 'presentation/utils/util_colors.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.white,
       ),
+      initialBinding: BindingsBuilder.put(() => PhotosController()),
       home: const PhotosPage(),
     );
   }
