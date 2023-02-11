@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../data/repositories/search_image_repository_impl.dart';
@@ -32,5 +33,9 @@ class PhotosController extends GetxController {
 
   void onSearchQuery(String query) {
     _query(query);
+  }
+
+  void dismissKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 }
