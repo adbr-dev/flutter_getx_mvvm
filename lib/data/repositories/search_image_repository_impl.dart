@@ -14,6 +14,11 @@ class SearchImageRepositoryImpl implements SearchImageRepository {
     int? page,
     int? size,
   }) {
-    return _api.searchImage(query: query);
+    return _api.searchImage(
+      query: query,
+      sort: sort,
+      page: page,
+      size: size,
+    );
   }
 }
