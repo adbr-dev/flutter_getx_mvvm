@@ -18,6 +18,26 @@ class PhotosPage extends GetView<PhotosController> {
           onChanged: controller.onSearchQuery,
         ),
       ),
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 2,
+          crossAxisSpacing: 2,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        itemCount: 300,
+        itemBuilder: (_, index) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Container(
+              color: Colors.purpleAccent,
+              child: Center(
+                child: Text('$index'),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
