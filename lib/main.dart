@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: UtilColors.main,
         appBarTheme: const AppBarTheme(
           color: Colors.white,
+          elevation: 0,
         ),
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: const PhotosPage(),
     );
