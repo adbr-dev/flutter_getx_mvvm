@@ -31,7 +31,7 @@ class PhotosPage extends GetView<PhotosController> {
           itemCount: 300,
           itemBuilder: (_, index) {
             return ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(2.0),
               child: Container(
                 color: Colors.purpleAccent,
                 child: Center(
