@@ -23,7 +23,10 @@ class PhotosController extends GetxController {
 
   void _searchImage(query) async {
     print('[debounce] $query');
-    final result = await _repository.searchImage(query: query);
+    final result = await _repository.searchImage(
+      query: query,
+      size: 30,
+    );
     print('[debounce] ${result.documents.length}');
   }
 
