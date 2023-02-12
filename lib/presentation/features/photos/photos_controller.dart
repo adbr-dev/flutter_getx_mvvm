@@ -12,11 +12,19 @@ class PhotosController extends GetxController {
       : _repository = repository ?? SearchImageRepositoryImpl();
 
   final SearchImageRepository _repository;
-  final _formKey = GlobalKey<FormState>();
   final _query = ''.obs;
   final documents = <ImageDocument>[].obs;
 
+  final _formKey = GlobalKey<FormState>();
+  var _searchInitialized = false;
+  var _isPagingEnd = false;
+
   GlobalKey<FormState> get formKey => _formKey;
+  bool get showPagingIndicator {
+    if (_isPagingEnd) return false;
+    if (!_searchInitialized) return false;
+    return true;
+  }
 
   @override
   void onInit() {
@@ -34,11 +42,15 @@ class PhotosController extends GetxController {
     _formKey.currentState!.save();
     dismissKeyboard();
 
-    log('[debounce] query $query');
+    log('[debounce] query $query (${documents.length})');
     final result = await _repository.searchImage(
       query: query,
       size: 30,
     );
+
+    _searchInitialized = true;
+    _isPagingEnd = result.isEnd;
+
     documents(result.documents);
   }
 

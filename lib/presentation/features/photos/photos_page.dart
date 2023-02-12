@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../utils/util_size.dart';
 import '../../utils/util_validator.dart';
@@ -21,6 +22,7 @@ class PhotosPage extends GetView<PhotosController> {
             slivers: [
               SliverAppBar(
                 toolbarHeight: 90,
+                floating: true,
                 title: Form(
                   key: controller.formKey,
                   child: TextFormField(
@@ -46,7 +48,20 @@ class PhotosPage extends GetView<PhotosController> {
                   mainAxisSpacing: 2,
                   crossAxisSpacing: 2,
                 ),
-              )
+              ),
+              if (controller.showPagingIndicator)
+                SliverToBoxAdapter(
+                  child: VisibilityDetector(
+                    key: const Key('load-more-line'),
+                    onVisibilityChanged: (_) {
+                      print('onVisibilityChanged');
+                    },
+                    child: const SizedBox(
+                      height: 50,
+                      child: CupertinoActivityIndicator(),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
