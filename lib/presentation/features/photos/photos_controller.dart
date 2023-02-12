@@ -12,8 +12,11 @@ class PhotosController extends GetxController {
       : _repository = repository ?? SearchImageRepositoryImpl();
 
   final SearchImageRepository _repository;
+  final _formKey = GlobalKey<FormState>();
   final _query = ''.obs;
   final documents = <ImageDocument>[].obs;
+
+  GlobalKey<FormState> get formKey => _formKey;
 
   @override
   void onInit() {
@@ -27,6 +30,10 @@ class PhotosController extends GetxController {
   }
 
   void _searchImage(query) async {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
+    dismissKeyboard();
+
     log('[debounce] query $query');
     final result = await _repository.searchImage(
       query: query,

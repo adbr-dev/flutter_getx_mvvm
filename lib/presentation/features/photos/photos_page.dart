@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../utils/util_size.dart';
+import '../../utils/util_validator.dart';
 import 'photos_controller.dart';
 
 class PhotosPage extends GetView<PhotosController> {
@@ -19,11 +20,17 @@ class PhotosPage extends GetView<PhotosController> {
             cacheExtent: Get.height * 2,
             slivers: [
               SliverAppBar(
-                title: TextField(
-                  autofocus: true,
-                  decoration: _inputDecoration,
-                  cursorHeight: 22.0,
-                  onChanged: controller.onSearchQuery,
+                toolbarHeight: 90,
+                title: Form(
+                  key: controller.formKey,
+                  child: TextFormField(
+                    autofocus: true,
+                    decoration: _inputDecoration,
+                    cursorHeight: 22.0,
+                    validator: UtilValidator.displayNameValidator,
+                    textInputAction: TextInputAction.search,
+                    onChanged: controller.onSearchQuery,
+                  ),
                 ),
               ),
               SliverGrid(
@@ -81,6 +88,9 @@ class PhotosPage extends GetView<PhotosController> {
       hintText: '검색할 키워드를 입력해주세요.',
       enabledBorder: border,
       focusedBorder: border,
+      errorBorder: border.copyWith(
+        borderSide: BorderSide(color: Colors.red[600]!),
+      ),
       border: border,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       prefixIcon: const Icon(
