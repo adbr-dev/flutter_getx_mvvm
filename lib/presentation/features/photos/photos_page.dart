@@ -21,71 +21,73 @@ class PhotosPage extends GetView<PhotosController> {
     return GestureDetector(
       onTap: controller.dismissKeyboard,
       child: Scaffold(
-        body: CustomScrollView(
-          cacheExtent: Get.height * 2,
-          slivers: [
-            SliverAppBar(
-              toolbarHeight: 90,
-              floating: true,
-              title: Form(
-                key: controller.formKey,
-                child: TextFormField(
-                  autofocus: true,
-                  decoration: _inputDecoration,
-                  cursorHeight: 22.0,
-                  validator: UtilValidator.displayNameValidator,
-                  textInputAction: TextInputAction.search,
-                  onChanged: controller.onSearchQuery,
-                ),
-              ),
-            ),
-            Obx(
-              () {
-                if (!controller.searchInitialized) {
-                  return const SliverToBoxAdapter(
-                    child: PhotosInitScreen(),
-                  );
-                }
-                if (controller.showErrorScreen) {
-                  return const SliverToBoxAdapter(
-                    child: PhotosErrorScreen(),
-                  );
-                }
-                if (controller.showEmptyScreen) {
-                  return const SliverToBoxAdapter(
-                    child: PhotosEmptyScreen(),
-                  );
-                }
-
-                return SliverGrid(
-                  delegate: SliverChildBuilderDelegate(
-                    _buildGridTile,
-                    addRepaintBoundaries: true,
-                    addSemanticIndexes: true,
-                    addAutomaticKeepAlives: true,
-                    childCount: controller.documents.length,
+        body: Obx(
+          (() => CustomScrollView(
+                cacheExtent: Get.height * 2,
+                slivers: [
+                  SliverAppBar(
+                    toolbarHeight: 90,
+                    floating: true,
+                    title: Form(
+                      key: controller.formKey,
+                      child: TextFormField(
+                        autofocus: true,
+                        decoration: _inputDecoration,
+                        cursorHeight: 22.0,
+                        validator: UtilValidator.displayNameValidator,
+                        textInputAction: TextInputAction.search,
+                        onChanged: controller.onSearchQuery,
+                      ),
+                    ),
                   ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 2,
-                    crossAxisSpacing: 2,
-                  ),
-                );
-              },
-            ),
-            if (controller.showPagingIndicator)
-              SliverToBoxAdapter(
-                child: VisibilityDetector(
-                  key: const Key('load-more-line'),
-                  onVisibilityChanged: controller.onPaging,
-                  child: const SizedBox(
-                    height: 50,
-                    child: CupertinoActivityIndicator(),
-                  ),
-                ),
-              ),
-          ],
+                  _buildBody(),
+                  if (controller.showPagingIndicator)
+                    SliverToBoxAdapter(
+                      child: VisibilityDetector(
+                        key: const Key('load-more-line'),
+                        onVisibilityChanged: controller.onPaging,
+                        child: const SizedBox(
+                          height: 50,
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      ),
+                    ),
+                ],
+              )),
         ),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (!controller.searchInitialized) {
+      return const SliverToBoxAdapter(
+        child: PhotosInitScreen(),
+      );
+    }
+    if (controller.showErrorScreen) {
+      return const SliverToBoxAdapter(
+        child: PhotosErrorScreen(),
+      );
+    }
+    if (controller.showEmptyScreen) {
+      return const SliverToBoxAdapter(
+        child: PhotosEmptyScreen(),
+      );
+    }
+
+    return SliverGrid(
+      delegate: SliverChildBuilderDelegate(
+        _buildGridTile,
+        addRepaintBoundaries: true,
+        addSemanticIndexes: true,
+        addAutomaticKeepAlives: true,
+        childCount: controller.documents.length,
+      ),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: 2,
+        crossAxisSpacing: 2,
       ),
     );
   }
