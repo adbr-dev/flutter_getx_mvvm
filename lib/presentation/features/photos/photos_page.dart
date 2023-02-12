@@ -53,9 +53,7 @@ class PhotosPage extends GetView<PhotosController> {
                 SliverToBoxAdapter(
                   child: VisibilityDetector(
                     key: const Key('load-more-line'),
-                    onVisibilityChanged: (_) {
-                      print('onVisibilityChanged');
-                    },
+                    onVisibilityChanged: controller.onPaging,
                     child: const SizedBox(
                       height: 50,
                       child: CupertinoActivityIndicator(),

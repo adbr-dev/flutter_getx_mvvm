@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../data/models/search_image_model.dart';
 import '../../../data/repositories/search_image_repository_impl.dart';
@@ -12,12 +11,14 @@ class PhotosController extends GetxController {
       : _repository = repository ?? SearchImageRepositoryImpl();
 
   final SearchImageRepository _repository;
+
   final _query = ''.obs;
   final documents = <ImageDocument>[].obs;
 
   final _formKey = GlobalKey<FormState>();
   var _searchInitialized = false;
   var _isPagingEnd = false;
+  var _page = 1;
 
   GlobalKey<FormState> get formKey => _formKey;
   bool get showPagingIndicator {
@@ -37,21 +38,37 @@ class PhotosController extends GetxController {
     );
   }
 
-  void _searchImage(query) async {
+  void _searchImage(_) async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
     dismissKeyboard();
 
-    log('[debounce] query $query (${documents.length})');
+    documents.clear();
+    _page = 1;
+    _fetchImage();
+  }
+
+  void onPaging(VisibilityInfo info) async {
+    final downScroll = info.visibleFraction != 0.0;
+    final canRequest = downScroll && !_isPagingEnd;
+
+    if (canRequest) {
+      _page++;
+      _fetchImage();
+    }
+  }
+
+  Future<void> _fetchImage() async {
     final result = await _repository.searchImage(
-      query: query,
+      query: _query.value,
       size: 30,
+      page: _page,
     );
 
     _searchInitialized = true;
     _isPagingEnd = result.isEnd;
 
-    documents(result.documents);
+    documents.addAll(result.documents);
   }
 
   void onSearchQuery(String query) {
