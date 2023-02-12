@@ -13,22 +13,25 @@
 | paging     | ![android_paging](https://user-images.githubusercontent.com/51875059/218309688-31c1da0f-c8c9-4052-b660-4ce4c6232320.gif)       | ![ios_paging](https://user-images.githubusercontent.com/51875059/218310731-c1d2e68e-9874-44a2-abdb-14e346179e63.gif)      |
 | error     | ![android_err](https://user-images.githubusercontent.com/51875059/218309835-a0d9a778-9d9c-4c35-820c-11b1cac67597.gif)       | ![ios_err](https://user-images.githubusercontent.com/51875059/218310329-1de46dcd-c180-4620-9ae8-1c35f4dfbbe0.gif)      |
 
+</br>
 
-## 주 기능
+## 기능
 - Flutter Clean architecture </br> 
   : 3가지 모듈로 나누어 바라봅니다. `Data` - `Domain` - `App(Presentation)`
   - **Data**: Repositories, source(call API) `데이터 처리`
   - **Domain:** Repositories(interface), usecases, entities  `비지니스 로직`
   - **Presentation:** pages, state(model) ←→ presenter(controller) 
-  
-  > 이번 프로젝트에선 도메인 레이어에서 usecases를 뺐습니다.
 
 - [GetX](https://pub.dev/packages/get)
   - 상태 관리, 네비게이션, DI 관리에 사용
   - `debounce` Worker를 이용해 1분간 검색 타이핑이 멈출 경우에만 검색이 되도록 설정
+
 - http api 통신
+
 - 에러 핸들링
 
-## 그 외 기능
 - 페이징 방식
+
 - 네트워크 이미지 캐싱
+
+- 테스트 코드
