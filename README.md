@@ -15,6 +15,26 @@
 
 </br>
 
+## 폴더 구조
+
+```
+/data
+  /models
+  /repositories
+  /sources
+/domain
+  /repositories
+  /usecases (생략)
+/presentation
+  /features
+    /photo_detail
+    /photos
+  /utils
+main.dart
+```
+
+</br>
+
 ## 기능
 - Flutter Clean architecture </br> 
   : 3가지 모듈로 나누어 바라봅니다. `Data` - `Domain` - `App(Presentation)`
