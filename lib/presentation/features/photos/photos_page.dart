@@ -1,6 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animator/animation/animation_preferences.dart';
+import 'package:flutter_animator/widgets/fading_entrances/fade_in.dart';
 import 'package:get/get.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -90,22 +92,38 @@ class PhotosPage extends GetView<PhotosController> {
 
   Widget _buildGridTile(_, int index) {
     final imageSize = Get.width * 1 / 3;
+    final url = controller.documents[index].imageUrl;
 
     return GestureDetector(
       onTap: () => controller.onPushDetailPage(index),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(2.0),
         child: ExtendedImage.network(
-          controller.documents[index].imageUrl,
-          fit: BoxFit.cover,
-          width: imageSize,
-          height: imageSize,
+          url,
           cacheWidth: imageSize.toInt(),
           cacheHeight: imageSize.toInt(),
           cache: true,
           clearMemoryCacheIfFailed: true,
           clearMemoryCacheWhenDispose: true,
           compressionRatio: .5,
+          loadStateChanged: (state) {
+            switch (state.extendedImageLoadState) {
+              case LoadState.loading:
+                return const Icon(CupertinoIcons.photo);
+              case LoadState.completed:
+                return FadeIn(
+                  preferences: const AnimationPreferences(
+                    duration: Duration(milliseconds: 500),
+                  ),
+                  child: ExtendedRawImage(
+                    key: Key(url),
+                    image: state.extendedImageInfo?.image,
+                  ),
+                );
+              case LoadState.failed:
+                return const Icon(CupertinoIcons.eye_slash_fill);
+            }
+          },
         ),
       ),
     );
