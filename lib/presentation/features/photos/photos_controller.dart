@@ -30,7 +30,7 @@ class PhotosController extends GetxController {
   bool get showEmptyScreen => documents.isEmpty && !_load;
   bool get showPagingIndicator {
     if (_showErrorScreen.value) return false;
-    if (showEmptyScreen) return false;
+    if (documents.isEmpty) return false;
     if (_isPagingEnd) return false;
     if (!_searchInitialized.value) return false;
     return true;
