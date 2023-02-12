@@ -7,6 +7,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/util_size.dart';
 import '../../utils/util_validator.dart';
 import 'photos_controller.dart';
+import 'photos_empty_screen.dart';
+import 'photos_error_screen.dart';
+import 'photos_init_screen.dart';
 
 class PhotosPage extends GetView<PhotosController> {
   const PhotosPage({super.key});
@@ -16,52 +19,70 @@ class PhotosPage extends GetView<PhotosController> {
     return GestureDetector(
       onTap: controller.dismissKeyboard,
       child: Scaffold(
-        body: Obx(
-          () => CustomScrollView(
-            cacheExtent: Get.height * 2,
-            slivers: [
-              SliverAppBar(
-                toolbarHeight: 90,
-                floating: true,
-                title: Form(
-                  key: controller.formKey,
-                  child: TextFormField(
-                    autofocus: true,
-                    decoration: _inputDecoration,
-                    cursorHeight: 22.0,
-                    validator: UtilValidator.displayNameValidator,
-                    textInputAction: TextInputAction.search,
-                    onChanged: controller.onSearchQuery,
+        body: CustomScrollView(
+          cacheExtent: Get.height * 2,
+          slivers: [
+            SliverAppBar(
+              toolbarHeight: 90,
+              floating: true,
+              title: Form(
+                key: controller.formKey,
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: _inputDecoration,
+                  cursorHeight: 22.0,
+                  validator: UtilValidator.displayNameValidator,
+                  textInputAction: TextInputAction.search,
+                  onChanged: controller.onSearchQuery,
+                ),
+              ),
+            ),
+            Obx(
+              () {
+                if (!controller.searchInitialized) {
+                  return const SliverToBoxAdapter(
+                    child: PhotosInitScreen(),
+                  );
+                }
+                if (controller.showErrorScreen.value) {
+                  return const SliverToBoxAdapter(
+                    child: PhotosErrorScreen(),
+                  );
+                }
+                if (controller.documents.isEmpty && !controller.load) {
+                  return const SliverToBoxAdapter(
+                    child: PhotosEmptyScreen(),
+                  );
+                }
+
+                return SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    _buildGridTile,
+                    addRepaintBoundaries: true,
+                    addSemanticIndexes: true,
+                    addAutomaticKeepAlives: true,
+                    childCount: controller.documents.length,
+                  ),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 2,
+                  ),
+                );
+              },
+            ),
+            if (controller.showPagingIndicator)
+              SliverToBoxAdapter(
+                child: VisibilityDetector(
+                  key: const Key('load-more-line'),
+                  onVisibilityChanged: controller.onPaging,
+                  child: const SizedBox(
+                    height: 50,
+                    child: CupertinoActivityIndicator(),
                   ),
                 ),
               ),
-              SliverGrid(
-                delegate: SliverChildBuilderDelegate(
-                  _buildGridTile,
-                  addRepaintBoundaries: true,
-                  addSemanticIndexes: true,
-                  addAutomaticKeepAlives: true,
-                  childCount: controller.documents.length,
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 2,
-                  crossAxisSpacing: 2,
-                ),
-              ),
-              if (controller.showPagingIndicator)
-                SliverToBoxAdapter(
-                  child: VisibilityDetector(
-                    key: const Key('load-more-line'),
-                    onVisibilityChanged: controller.onPaging,
-                    child: const SizedBox(
-                      height: 50,
-                      child: CupertinoActivityIndicator(),
-                    ),
-                  ),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );
