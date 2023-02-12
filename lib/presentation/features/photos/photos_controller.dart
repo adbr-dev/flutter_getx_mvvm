@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../../data/models/search_image_model.dart';
 import '../../../data/repositories/search_image_repository_impl.dart';
 import '../../../domain/repositories/search_image_repository.dart';
 
@@ -10,6 +13,7 @@ class PhotosController extends GetxController {
 
   final SearchImageRepository _repository;
   final _query = ''.obs;
+  final documents = <ImageDocument>[].obs;
 
   @override
   void onInit() {
@@ -23,12 +27,12 @@ class PhotosController extends GetxController {
   }
 
   void _searchImage(query) async {
-    print('[debounce] $query');
+    log('[debounce] query $query');
     final result = await _repository.searchImage(
       query: query,
       size: 30,
     );
-    print('[debounce] ${result.documents.length}');
+    documents(result.documents);
   }
 
   void onSearchQuery(String query) {

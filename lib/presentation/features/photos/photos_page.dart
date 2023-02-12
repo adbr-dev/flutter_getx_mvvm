@@ -21,25 +21,28 @@ class PhotosPage extends GetView<PhotosController> {
             onChanged: controller.onSearchQuery,
           ),
         ),
-        body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 2,
-            crossAxisSpacing: 2,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          itemCount: 300,
-          itemBuilder: (_, index) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(2.0),
-              child: Container(
-                color: Colors.purpleAccent,
-                child: Center(
-                  child: Text('$index'),
+        body: Obx(
+          () => GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 2,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            itemCount: controller.documents.length,
+            itemBuilder: (_, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(2.0),
+                child: Container(
+                  color: Colors.purpleAccent,
+                  child: Image.network(
+                    controller.documents[index].imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
