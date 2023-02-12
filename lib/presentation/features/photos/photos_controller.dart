@@ -69,6 +69,7 @@ class PhotosController extends GetxController {
 
   Future<void> _fetchImage() async {
     try {
+      _searchInitialized(true);
       _load = true;
       _showErrorScreen(false);
 
@@ -78,7 +79,6 @@ class PhotosController extends GetxController {
         page: _page,
       );
 
-      _searchInitialized(true);
       _isPagingEnd = result.isEnd;
 
       documents.addAll(result.documents);
