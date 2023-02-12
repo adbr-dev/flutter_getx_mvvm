@@ -91,19 +91,22 @@ class PhotosPage extends GetView<PhotosController> {
   Widget _buildGridTile(_, int index) {
     final imageSize = Get.width * 1 / 3;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(2.0),
-      child: ExtendedImage.network(
-        controller.documents[index].imageUrl,
-        fit: BoxFit.cover,
-        width: imageSize,
-        height: imageSize,
-        cacheWidth: imageSize.toInt(),
-        cacheHeight: imageSize.toInt(),
-        cache: true,
-        clearMemoryCacheIfFailed: true,
-        clearMemoryCacheWhenDispose: true,
-        compressionRatio: .5,
+    return GestureDetector(
+      onTap: () => controller.onPushDetailPage(index),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(2.0),
+        child: ExtendedImage.network(
+          controller.documents[index].imageUrl,
+          fit: BoxFit.cover,
+          width: imageSize,
+          height: imageSize,
+          cacheWidth: imageSize.toInt(),
+          cacheHeight: imageSize.toInt(),
+          cache: true,
+          clearMemoryCacheIfFailed: true,
+          clearMemoryCacheWhenDispose: true,
+          compressionRatio: .5,
+        ),
       ),
     );
   }

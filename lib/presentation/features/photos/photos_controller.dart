@@ -5,6 +5,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../../data/models/search_image_model.dart';
 import '../../../data/repositories/search_image_repository_impl.dart';
 import '../../../domain/repositories/search_image_repository.dart';
+import '../photo_detail/photo_detail_page.dart';
 
 class PhotosController extends GetxController {
   PhotosController({SearchImageRepository? repository})
@@ -95,5 +96,12 @@ class PhotosController extends GetxController {
 
   void dismissKeyboard() {
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  void onPushDetailPage(int index) {
+    final document = _documents[index];
+    Get.to(
+      PhotoDetailPage(document: document),
+    );
   }
 }
