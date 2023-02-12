@@ -1,6 +1,7 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 
 import '../../utils/util_size.dart';
 import 'photos_controller.dart';
@@ -13,37 +14,55 @@ class PhotosPage extends GetView<PhotosController> {
     return GestureDetector(
       onTap: controller.dismissKeyboard,
       child: Scaffold(
-        appBar: AppBar(
-          title: TextField(
-            autofocus: true,
-            decoration: _inputDecoration,
-            cursorHeight: 22.0,
-            onChanged: controller.onSearchQuery,
-          ),
-        ),
         body: Obx(
-          () => GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 2,
-              crossAxisSpacing: 2,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            itemCount: controller.documents.length,
-            itemBuilder: (_, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(2.0),
-                child: Container(
-                  color: Colors.purpleAccent,
-                  child: Image.network(
-                    controller.documents[index].imageUrl,
-                    fit: BoxFit.cover,
-                  ),
+          () => CustomScrollView(
+            cacheExtent: Get.height * 2,
+            slivers: [
+              SliverAppBar(
+                title: TextField(
+                  autofocus: true,
+                  decoration: _inputDecoration,
+                  cursorHeight: 22.0,
+                  onChanged: controller.onSearchQuery,
                 ),
-              );
-            },
+              ),
+              SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  _buildGridTile,
+                  addRepaintBoundaries: true,
+                  addSemanticIndexes: true,
+                  addAutomaticKeepAlives: true,
+                  childCount: controller.documents.length,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 2,
+                  crossAxisSpacing: 2,
+                ),
+              )
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildGridTile(_, int index) {
+    final imageSize = Get.width * 1 / 3;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(2.0),
+      child: ExtendedImage.network(
+        controller.documents[index].imageUrl,
+        fit: BoxFit.cover,
+        width: imageSize,
+        height: imageSize,
+        cacheWidth: imageSize.toInt(),
+        cacheHeight: imageSize.toInt(),
+        cache: true,
+        clearMemoryCacheIfFailed: true,
+        clearMemoryCacheWhenDispose: true,
+        compressionRatio: .5,
       ),
     );
   }
