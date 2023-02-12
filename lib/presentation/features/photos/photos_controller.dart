@@ -13,22 +13,24 @@ class PhotosController extends GetxController {
   final SearchImageRepository _repository;
 
   final _query = ''.obs;
-  final documents = <ImageDocument>[].obs;
-  var showErrorScreen = false.obs;
+  final _documents = <ImageDocument>[].obs;
+  final _searchInitialized = false.obs;
+  final _showErrorScreen = false.obs;
 
   final _formKey = GlobalKey<FormState>();
   var _load = false;
-  var _searchInitialized = false;
   var _isPagingEnd = false;
   var _page = 1;
 
   GlobalKey<FormState> get formKey => _formKey;
+  RxList<ImageDocument> get documents => _documents;
   bool get load => _load;
-  bool get searchInitialized => _searchInitialized;
+  bool get searchInitialized => _searchInitialized.value;
+  bool get showErrorScreen => _showErrorScreen.value;
   bool get showPagingIndicator {
-    if (showErrorScreen.value) return false;
+    if (_showErrorScreen.value) return false;
     if (_isPagingEnd) return false;
-    if (!_searchInitialized) return false;
+    if (!_searchInitialized.value) return false;
     return true;
   }
 
@@ -66,7 +68,7 @@ class PhotosController extends GetxController {
   Future<void> _fetchImage() async {
     try {
       _load = true;
-      showErrorScreen(false);
+      _showErrorScreen(false);
 
       final result = await _repository.searchImage(
         query: _query.value,
@@ -74,12 +76,12 @@ class PhotosController extends GetxController {
         page: _page,
       );
 
-      _searchInitialized = true;
+      _searchInitialized(true);
       _isPagingEnd = result.isEnd;
 
       documents.addAll(result.documents);
     } catch (e) {
-      showErrorScreen(true);
+      _showErrorScreen(true);
 
       e.printError();
     } finally {

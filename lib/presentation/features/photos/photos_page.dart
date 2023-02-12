@@ -44,7 +44,7 @@ class PhotosPage extends GetView<PhotosController> {
                     child: PhotosInitScreen(),
                   );
                 }
-                if (controller.showErrorScreen.value) {
+                if (controller.showErrorScreen) {
                   return const SliverToBoxAdapter(
                     child: PhotosErrorScreen(),
                   );
