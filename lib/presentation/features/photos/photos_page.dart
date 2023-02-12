@@ -118,6 +118,9 @@ class PhotosPage extends GetView<PhotosController> {
                   child: ExtendedRawImage(
                     key: Key(url),
                     image: state.extendedImageInfo?.image,
+                    fit: BoxFit.cover,
+                    width: imageSize,
+                    height: imageSize,
                   ),
                 );
               case LoadState.failed:
