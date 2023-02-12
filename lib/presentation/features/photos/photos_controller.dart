@@ -25,11 +25,12 @@ class PhotosController extends GetxController {
 
   GlobalKey<FormState> get formKey => _formKey;
   RxList<ImageDocument> get documents => _documents;
-  bool get load => _load;
   bool get searchInitialized => _searchInitialized.value;
   bool get showErrorScreen => _showErrorScreen.value;
+  bool get showEmptyScreen => documents.isEmpty && !_load;
   bool get showPagingIndicator {
     if (_showErrorScreen.value) return false;
+    if (showEmptyScreen) return false;
     if (_isPagingEnd) return false;
     if (!_searchInitialized.value) return false;
     return true;

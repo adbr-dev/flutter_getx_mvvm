@@ -49,7 +49,7 @@ class PhotosPage extends GetView<PhotosController> {
                     child: PhotosErrorScreen(),
                   );
                 }
-                if (controller.documents.isEmpty && !controller.load) {
+                if (controller.showEmptyScreen) {
                   return const SliverToBoxAdapter(
                     child: PhotosEmptyScreen(),
                   );
